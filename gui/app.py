@@ -8,7 +8,6 @@ from .theme import setup_theme, COLORS
 from .file_selector import FileSelector
 from .search_panel import SearchPanel
 from .calendar_widget import CalendarWidget
-from .results_display import ResultsDisplay
 from .export_utils import ExportUtils
 
 from roster_searcher import RosterSearcher
@@ -79,51 +78,27 @@ class RosterSearchApp:
         version_label.pack(side='right')
         
     def create_components(self):
-        """Create application components"""
+        """Create minimal application components"""
         # File selector
         self.file_selector = FileSelector(self.main_container)
-        
+
         # Search panel
         self.search_panel = SearchPanel(
             self.main_container,
             on_search_callback=self.run_search
         )
-        
-        # Create a content frame containing calendar and results
-        self.content_frame = ttk.Frame(self.main_container, style='TFrame')
-        
-        # Calendar widget
+
+        # Calendar widget (directly under main container)
         self.calendar_widget = CalendarWidget(
-            self.content_frame,
+            self.main_container,
             on_date_selected=self.on_calendar_date_selected
         )
         
-        # Results display
-        self.results_display = ResultsDisplay(
-            self.content_frame,
-            on_save=self.save_results,
-            on_export=self.export_to_calendar
-        )
-        
     def layout_components(self):
-        """Layout application components"""
-        # Add file selector to main container
+        """Layout components for minimal UI"""
         self.file_selector.pack(fill='x', pady=(0, 5))
-        
-        # Add search panel to main container
         self.search_panel.pack(fill='x', pady=5)
-        
-        # Add content frame to main container
-        self.content_frame.pack(fill='both', expand=True, pady=5)
-        
-        # Configure content frame grid
-        self.content_frame.columnconfigure(0, weight=2)  # Calendar gets 2/5 of width
-        self.content_frame.columnconfigure(1, weight=3)  # Results get 3/5 of width
-        self.content_frame.rowconfigure(0, weight=1)
-        
-        # Add calendar and results to content frame using grid
-        self.calendar_widget.grid(row=0, column=0, sticky='nsew', padx=(0, 5))
-        self.results_display.grid(row=0, column=1, sticky='nsew')
+        self.calendar_widget.pack(fill='both', expand=True, pady=5)
         
     def run_search(self, name=None):
         """Run the roster search
@@ -148,9 +123,8 @@ class RosterSearchApp:
         try:
             results = self.searcher.search_person_schedule(file_path, name, password)
             
-            # Update results display
+            # Store results for later reference
             self.results = results
-            self.results_display.display_results(results, name, file_path)
             
             # Group results by date for calendar highlighting
             self.results_by_date = {}
@@ -200,15 +174,16 @@ class RosterSearchApp:
         if date_str in self.results_by_date:
             date_results = self.results_by_date[date_str]
             name = date_results[0].get('name', '')
-            file_path = self.file_selector.get_file_path()
-            self.results_display.display_results(date_results, name, file_path)
-            self.search_panel.set_status(f"Showing {len(date_results)} results for {date_str}")
+            info_lines = [f"Results for {name} on {date_str}:"]
+            for res in date_results:
+                sheet = res.get('sheet','Unknown')
+                context = res.get('context','')
+                position = res.get('position','')
+                info_lines.append(f"Sheet: {sheet}\nContext: {context}\nPosition: {position}\n---")
+            messagebox.showinfo("Schedule", "\n".join(info_lines))
+            self.search_panel.set_status(f"{len(date_results)} result(s) for {date_str}")
         elif self.results:
-            # If no results for this date but we have overall results, show all
-            name = self.search_panel.get_search_name()
-            file_path = self.file_selector.get_file_path()
-            self.results_display.display_results(self.results, name, file_path)
-            self.search_panel.set_status(f"No results for {date_str}, showing all")
+            self.search_panel.set_status(f"No results for {date_str}")
     
     def save_results(self, results):
         """Save search results to a file
