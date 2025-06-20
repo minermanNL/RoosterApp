@@ -73,6 +73,11 @@ Thumbs.db
 # Windsurf memory and logs
 .windsurf/
 
+# Redundant legacy files (old GUI, caches)
+schema_extractor_gui.py
+__pycache__/
+gui/__pycache__/
+
 # Environment variables and secrets
 .env
 .env.*
