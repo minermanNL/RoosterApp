@@ -1,11 +1,11 @@
 import sys
-from schema_extractor_gui import SchemaExtractorGUI
 import tkinter as tk
 from roster_searcher import RosterSearcher
+from gui.app import RosterSearchApp
 
 def launch_gui():
     root = tk.Tk()
-    app = SchemaExtractorGUI(root)
+    app = RosterSearchApp(root)
     root.mainloop()
 
 def main():
