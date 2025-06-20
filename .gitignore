@@ -1,0 +1,105 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# mypy
+.mypy_cache/
+.dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# VS Code
+.vscode/
+
+# Tkinter window manager state
+*.tkinter*
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Excel files and sensitive data
+*.xlsx
+*.xls
+*.xlsm
+*.ods
+*.csv
+
+# Windsurf memory and logs
+.windsurf/
+
+# Environment variables and secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# Misc
+*.bak
+*.tmp
+~$*
+
+# Ignore compiled Cython files
+*.c
+*.cpp
+*.pyd
+
+# Ignore test result files
+*.out
+*.err
+
+# Ignore backup files
+*.swp
+*.swo
+
+# Ignore calendar exports
+*.ics
+
+# Ignore test data
+/test_data/
